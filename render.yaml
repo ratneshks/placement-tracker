@@ -1,0 +1,43 @@
+services:
+  # Database
+  - type: database
+    name: placement-tracker-db
+    databaseName: placement_tracker
+    user: postgres
+    plan: free
+
+  # Backend (Spring Boot)
+  - type: web
+    name: placement-tracker-backend
+    env: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: placement-tracker-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: placement-tracker-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: placement-tracker-db
+          property: password
+
+  # Frontend (Static/Nginx via Docker)
+  - type: web
+    name: placement-tracker-frontend
+    env: docker
+    dockerContext: ./frontend
+    dockerfilePath: ./frontend/Dockerfile
+    plan: free
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: placement-tracker-backend
+          property: host
+        # Note: In production, you might need to append /api or use the full URL
