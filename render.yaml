@@ -1,11 +1,9 @@
 databases:
   - name: placement-tracker-db
-    databaseName: placement_tracker
-    user: postgres
+    databaseName: placementtracker
     plan: free
 
 services:
-
   # Backend (Spring Boot)
   - type: web
     name: placement-tracker-backend
@@ -39,5 +37,4 @@ services:
         fromService:
           type: web
           name: placement-tracker-backend
-          property: host
-        # Note: In production, you might need to append /api or use the full URL
+          property: url
