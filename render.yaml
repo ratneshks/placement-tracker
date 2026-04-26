@@ -1,10 +1,10 @@
-services:
-  # Database
-  - type: database
-    name: placement-tracker-db
+databases:
+  - name: placement-tracker-db
     databaseName: placement_tracker
     user: postgres
     plan: free
+
+services:
 
   # Backend (Spring Boot)
   - type: web
